@@ -13,16 +13,17 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             direction: rtl;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
+            background: #2c3e50;
             padding: 20px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 3px solid #e67e22;
         }
 
         .navbar .container {
@@ -37,7 +38,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #667eea;
+            color: white;
         }
 
         .nav-links {
@@ -48,13 +49,13 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #2c3e50;
+            color: white;
             font-weight: 500;
             transition: color 0.3s;
         }
 
         .nav-links a:hover {
-            color: #667eea;
+            color: #e67e22;
         }
 
         .hero {
@@ -62,19 +63,20 @@
             margin: 80px auto;
             padding: 0 20px;
             text-align: center;
-            color: white;
+            color: #2c3e50;
         }
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
         }
 
         .hero p {
             font-size: 1.3rem;
             margin-bottom: 40px;
-            opacity: 0.95;
+            color: #34495e;
         }
 
         .cta-buttons {
@@ -97,24 +99,25 @@
         }
 
         .btn-primary {
-            background: white;
-            color: #667eea;
+            background: #e67e22;
+            color: white;
         }
 
         .btn-primary:hover {
+            background: #d35400;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
         }
 
         .btn-secondary {
             background: transparent;
-            color: white;
-            border: 2px solid white;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
         }
 
         .btn-secondary:hover {
-            background: white;
-            color: #667eea;
+            background: #2c3e50;
+            color: white;
         }
 
         .features {
@@ -127,21 +130,24 @@
         }
 
         .feature-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
             transition: transform 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(230, 126, 34, 0.15);
         }
 
         .feature-card i {
             font-size: 3rem;
-            color: #667eea;
+            color: #e67e22;
             margin-bottom: 20px;
         }
 
@@ -152,16 +158,17 @@
         }
 
         .feature-card p {
-            color: #666;
+            color: #34495e;
             line-height: 1.6;
         }
 
         footer {
-            background: rgba(0,0,0,0.2);
+            background: #2c3e50;
             color: white;
             text-align: center;
             padding: 30px 20px;
             margin-top: 80px;
+            border-top: 3px solid #e67e22;
         }
     </style>
 </head>

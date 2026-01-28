@@ -17,21 +17,22 @@ class FamilyManager extends Component
 
     public function mount($id = null)
     {
+//        test
         if ($id) {
             $this->familyId = $id;
             $family = Family::with(['members', 'healthConditions'])->findOrFail($id);
-            
+
             $this->husband_name = $family->husband_name;
             $this->husband_id_number = $family->husband_id_number;
             $this->husband_dob = $family->husband_dob;
             $this->husband_phone = $family->husband_phone;
             $this->marital_status = $family->marital_status;
-            
+
             $this->wife_name = $family->wife_name;
             $this->wife_id_number = $family->wife_id_number;
             $this->wife_dob = $family->wife_dob;
             $this->wife_phone = $family->wife_phone;
-            
+
             $this->original_address = $family->original_address;
             $this->current_address = $family->current_address;
             $this->members_count = $family->family_members_count;

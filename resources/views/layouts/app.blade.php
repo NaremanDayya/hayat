@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'مخيم حياة النويري' }}</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <style>
         :root {
             --primary: #2c3e50;
@@ -181,9 +181,9 @@
     <nav>
         <div class="nav-brand">مخيم حياة النويري</div>
         <div class="nav-links">
-            <a href="/families">العائلات</a>
-            <a href="/sons">الأبناء الذكور</a>
-            <a href="/daughters">الأبناء الإناث</a>
+            <a href="dashboard/families">العائلات</a>
+            <a href="dashboard/sons">الأبناء الذكور</a>
+            <a href="dashboard/daughters">الأبناء الإناث</a>
             @auth
             <a href="/create-family" class="btn btn-primary">إضافة عائلة</a>
             @endauth

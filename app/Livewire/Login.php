@@ -20,7 +20,7 @@ class Login extends Component
         $this->validate();
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            return redirect()->intended('/families');
+            return redirect()->intended('/dashboard/families');
         }
 
         $this->addError('email', 'بيانات الاعتماد غير صحيحة.');

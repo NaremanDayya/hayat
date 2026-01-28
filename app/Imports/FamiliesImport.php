@@ -23,43 +23,37 @@ class FamiliesImport implements ToModel, WithStartRow
     */
     public function model(array $row)
     {
+        // Excel columns mapping:
+        // 0: اسم الزوج (Husband Name)
+        // 1: رقم هوية الزوج (Husband ID Number)
+        // 2: رقم هاتف الزوج (Husband Phone)
+        // 3: الحالة الاجتماعية (Marital Status)
+        // 4: اسم الزوجة (Wife Name)
+        // 5: رقم هوية الزوجة (Wife ID Number)
+        // 6: عدد أفراد الأسرة (Family Members Count)
+        // 7: مكان السكن الأصلي (Original Address)
+        
         // Check if the row is mostly empty
-        if (!isset($row[0]) && !isset($row[3])) {
+        if (empty($row[0]) && empty($row[4])) {
             return null;
         }
+
+        // Handle current address - set default if not provided
+        $currentAddress = !empty($row[8]) ? $row[8] : 'النصيرات-مخيم حياة النويري';
 
         return new Family([
-            'husband_name'         => $row[0] ?? null,
-            'husband_id_number'    => $row[1] ?? null,
-            'marital_status'       => $row[2] ?? 'متزوج',
-            'wife_name'            => $row[3] ?? null,
-            'wife_id_number'       => $row[4] ?? null,
-            'husband_phone'        => $row[5] ?? null,
-            'wife_dob'             => $this->transformDate($row[6] ?? null),
-            'family_members_count' => $row[7] ?? 0,
-            'original_address'     => $row[8] ?? null,
-            'current_address'      => $row[9] ?? null,
-            'wife_phone'           => $row[10] ?? null,
+            'husband_name'         => !empty($row[0]) ? $row[0] : null,
+            'husband_id_number'    => !empty($row[1]) ? $row[1] : null,
+            'husband_phone'        => !empty($row[2]) ? $row[2] : null,
+            'marital_status'       => !empty($row[3]) ? $row[3] : 'متزوج',
+            'wife_name'            => !empty($row[4]) ? $row[4] : null,
+            'wife_id_number'       => !empty($row[5]) ? $row[5] : null,
+            'family_members_count' => !empty($row[6]) ? (int)$row[6] : 0,
+            'original_address'     => !empty($row[7]) ? $row[7] : null,
+            'current_address'      => $currentAddress,
+            'husband_dob'          => null,
+            'wife_dob'             => null,
+            'wife_phone'           => null,
         ]);
-    }
-
-    /**
-     * Helper to handle excel date formats safely
-     */
-    private function transformDate($value)
-    {
-        if (empty($value)) return null;
-
-        try {
-            // If it's a numeric value from Excel (date serial)
-            if (is_numeric($value)) {
-                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value)->format('Y-m-d');
-            }
-            
-            // Otherwise try to parse it
-            return \Carbon\Carbon::parse($value)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return null;
-        }
     }
 }

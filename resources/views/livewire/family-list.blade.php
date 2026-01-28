@@ -44,7 +44,20 @@
         <table>
             <thead>
                 <tr>
-                    <th>اسم الزوج</th>
+                    <th>
+                        <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                            <span>اسم الزوج</span>
+                            <button wire:click="sortByName" style="background: transparent; border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                                @if($sortBy === 'name_asc')
+                                    <i class="fas fa-sort-alpha-down" style="color: #3498db;"></i>
+                                @elseif($sortBy === 'name_desc')
+                                    <i class="fas fa-sort-alpha-up" style="color: #3498db;"></i>
+                                @else
+                                    <i class="fas fa-sort" style="color: #95a5a6;"></i>
+                                @endif
+                            </button>
+                        </div>
+                    </th>
                     <th>الحالة</th>
                     <th>رقم هوية الزوج</th>
                     <th>اسم الزوجة</th>
@@ -85,8 +98,8 @@
                     </td>
                     <td>
                         <div style="display: flex; gap: 5px;">
-                            <a href="/family/{{ $family->id }}" class="btn btn-primary" style="padding: 5px 10px;">عرض</a>
-                            <a href="/edit-family/{{ $family->id }}" class="btn" style="background: #f1c40f; color: white; padding: 5px 10px;">تعديل</a>
+                            <a href="{{ route('dashboard.family-details', $family->id) }}" class="btn btn-primary" style="padding: 5px 10px;">عرض</a>
+                            <a href="{{ route('dashboard.edit-family', $family->id) }}" class="btn" style="background: #f1c40f; color: white; padding: 5px 10px;">تعديل</a>
                             <button wire:click="deleteFamily({{ $family->id }})" wire:confirm="هل أنت متأكد من حذف هذه العائلة؟" class="btn" style="background: #e74c3c; color: white; padding: 5px 10px;">حذف</button>
                         </div>
                     </td>
@@ -97,6 +110,6 @@
     </div>
 
     <div style="margin-top: 20px;">
-        {{ $families->links() }}
+        {{ $families->links('vendor.livewire.custom-pagination') }}
     </div>
 </div>

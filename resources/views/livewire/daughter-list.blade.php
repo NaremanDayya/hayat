@@ -60,7 +60,7 @@
                     <td>{{ $daughter->family->husband_name }}</td>
                     <td>
                         <div style="display: flex; gap: 5px;">
-                            <a href="/family/{{ $daughter->family_id }}" class="btn btn-primary" style="background-color: #e91e63;">عرض العائلة</a>
+                            <a href="{{ route('dashboard.family-details', $daughter->family_id) }}" class="btn btn-primary" style="background-color: #e91e63;">عرض العائلة</a>
                             <button wire:click="deleteDaughter({{ $daughter->id }})" wire:confirm="هل أنت متأكد من حذف هذه البنت؟" class="btn" style="background: #e74c3c; color: white; padding: 5px 10px;">حذف</button>
                         </div>
                     </td>
@@ -71,6 +71,6 @@
     </div>
 
     <div style="margin-top: 20px;">
-        {{ $daughters->links() }}
+        {{ $daughters->links('vendor.livewire.custom-pagination') }}
     </div>
 </div>

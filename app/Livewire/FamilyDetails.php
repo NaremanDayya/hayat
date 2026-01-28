@@ -22,7 +22,7 @@ class FamilyDetails extends Component
             'text' => 'تم حذف العائلة بنجاح.',
             'icon' => 'success'
         ]);
-        return redirect()->to('/families');
+        return redirect()->route('dashboard.families');
     }
 
     public function render()

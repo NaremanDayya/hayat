@@ -3,7 +3,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 30px;">
         <h2>تفاصيل عائلة: {{ $family->husband_name }}</h2>
         <div style="display: flex; gap: 10px;">
-            <a href="/families" class="btn btn-secondary" style="background: #34495e; color: white;">رجوع للقائمة</a>
+            <a href="{{ route('dashboard.families') }}" class="btn btn-secondary" style="background: #34495e; color: white;">رجوع للقائمة</a>
             <button wire:click="deleteFamily" wire:confirm="هل أنت متأكد من حذف هذه العائلة؟" class="btn" style="background: #e74c3c; color: white;">حذف العائلة</button>
         </div>
     </div>

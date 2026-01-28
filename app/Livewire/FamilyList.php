@@ -17,8 +17,9 @@ class FamilyList extends Component
     public $filterAge = null;
     public $ageCondition = '>='; // '>=', '<=', '='
     public $hasDisease = false;
+    public $sortBy = 'latest'; // 'latest', 'name_asc', 'name_desc'
     
-    protected $queryString = ['search', 'filterAge', 'ageCondition', 'hasDisease'];
+    protected $queryString = ['search', 'filterAge', 'ageCondition', 'hasDisease', 'sortBy'];
 
     public function updatingSearch()
     {
@@ -69,7 +70,19 @@ class FamilyList extends Component
 
     public function resetFilters()
     {
-        $this->reset(['search', 'filterAge', 'ageCondition', 'hasDisease']);
+        $this->reset(['search', 'filterAge', 'ageCondition', 'hasDisease', 'sortBy']);
+    }
+
+    public function sortByName()
+    {
+        if ($this->sortBy === 'name_asc') {
+            $this->sortBy = 'name_desc';
+        } elseif ($this->sortBy === 'name_desc') {
+            $this->sortBy = 'latest';
+        } else {
+            $this->sortBy = 'name_asc';
+        }
+        $this->resetPage();
     }
 
     public function deleteFamily($id)
@@ -129,8 +142,17 @@ class FamilyList extends Component
             });
         }
 
+        // Apply sorting
+        if ($this->sortBy === 'name_asc') {
+            $query->orderBy('husband_name', 'asc');
+        } elseif ($this->sortBy === 'name_desc') {
+            $query->orderBy('husband_name', 'desc');
+        } else {
+            $query->latest();
+        }
+
         return view('livewire.family-list', [
-            'families' => $query->latest()->paginate(10)
+            'families' => $query->paginate(10)
         ]);
     }
 }

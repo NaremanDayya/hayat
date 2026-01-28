@@ -167,7 +167,7 @@ class FamilyManager extends Component
             'icon' => 'success'
         ]);
 
-        return redirect()->to('/families');
+        return redirect()->route('dashboard.families');
     }
 
     public function render()

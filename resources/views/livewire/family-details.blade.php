@@ -4,6 +4,7 @@
         <h2>تفاصيل عائلة: {{ $family->husband_name }}</h2>
         <div style="display: flex; gap: 10px;">
             <a href="{{ route('dashboard.families') }}" class="btn btn-secondary" style="background: #34495e; color: white;">رجوع للقائمة</a>
+            <a href="{{ route('dashboard.edit-family',$family->id) }}" class="btn btn-secondary" style="background: #34495e; color: white;">تعديل</a>
             <button wire:click="deleteFamily" wire:confirm="هل أنت متأكد من حذف هذه العائلة؟" class="btn" style="background: #e74c3c; color: white;">حذف العائلة</button>
         </div>
     </div>

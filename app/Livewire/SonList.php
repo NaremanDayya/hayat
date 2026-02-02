@@ -11,20 +11,25 @@ class SonList extends Component
     use WithPagination, \Livewire\WithFileUploads;
 
     public $search = '';
-    public $filterAge = null;
-    public $ageCondition = '>=';
+    public $minAge = null;
+    public $maxAge = null;
     public $file;
     
-    protected $queryString = ['search', 'filterAge', 'ageCondition'];
+    protected $queryString = ['search', 'minAge', 'maxAge'];
 
     public function resetFilters()
     {
-        $this->reset(['search', 'filterAge', 'ageCondition']);
+        $this->reset(['search', 'minAge', 'maxAge']);
     }
 
     public function exportExcel()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SonsExport, 'sons_export.xlsx');
+        $filters = [
+            'search' => $this->search,
+            'minAge' => $this->minAge,
+            'maxAge' => $this->maxAge,
+        ];
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SonsExport($filters), 'sons_export.xlsx');
     }
 
     public function downloadSample()
@@ -94,29 +99,10 @@ class SonList extends Component
             });
         }
 
-        if ($this->filterAge !== null && $this->filterAge !== '') {
-            if (str_contains($this->filterAge, '-')) {
-                $range = explode('-', $this->filterAge);
-                if (count($range) === 2) {
-                    $minAge = trim($range[0]);
-                    $maxAge = trim($range[1]);
-                    
-                    if (is_numeric($minAge) && is_numeric($maxAge)) {
-                        $dateEnd = now()->subYears($minAge)->endOfDay()->format('Y-m-d');
-                        $dateStart = now()->subYears($maxAge)->startOfDay()->format('Y-m-d');
-                        $query->whereBetween('dob', [$dateStart, $dateEnd]);
-                    }
-                }
-            } else if (is_numeric($this->filterAge)) {
-                $targetDate = now()->subYears($this->filterAge)->format('Y-m-d');
-                if ($this->ageCondition === '>=') {
-                    $query->where('dob', '<=', $targetDate);
-                } elseif ($this->ageCondition === '<=') {
-                    $query->where('dob', '>=', $targetDate);
-                } else {
-                    $query->whereYear('dob', now()->subYears($this->filterAge)->year);
-                }
-            }
+        if ($this->minAge || $this->maxAge) {
+             $dateEnd = $this->minAge ? now()->subYears($this->minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
+             $dateStart = $this->maxAge ? now()->subYears($this->maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
+             $query->whereBetween('dob', [$dateStart, $dateEnd]);
         }
 
         return view('livewire.son-list', [

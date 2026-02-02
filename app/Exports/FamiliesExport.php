@@ -3,16 +3,56 @@
 namespace App\Exports;
 
 use App\Models\Family;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class FamiliesExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
+class FamiliesExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 {
-    public function collection()
+    protected $filters;
+
+    public function __construct($filters = [])
     {
-        return Family::all();
+        $this->filters = $filters;
+    }
+
+    public function query()
+    {
+        $query = Family::query()->with(['members', 'healthConditions']);
+
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('husband_name', 'like', '%' . $search . '%')
+                  ->orWhere('wife_name', 'like', '%' . $search . '%')
+                  ->orWhere('husband_id_number', 'like', '%' . $search . '%')
+                  ->orWhere('wife_id_number', 'like', '%' . $search . '%')
+                  ->orWhere('original_address', 'like', '%' . $search . '%')
+                  ->orWhere('current_address', 'like', '%' . $search . '%')
+                  ->orWhere('husband_phone', 'like', '%' . $search . '%')
+                  ->orWhere('wife_phone', 'like', '%' . $search . '%');
+            });
+        }
+
+        if (!empty($this->filters['hasDisease']) && $this->filters['hasDisease']) {
+            $query->has('healthConditions');
+        }
+
+        if (!empty($this->filters['minAge']) || !empty($this->filters['maxAge'])) {
+            $minAge = $this->filters['minAge'] ?? null;
+            $maxAge = $this->filters['maxAge'] ?? null;
+
+            $query->where(function($q) use ($minAge, $maxAge) {
+                $startDate = $maxAge ? now()->subYears($maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
+                $endDate = $minAge ? now()->subYears($minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
+
+                $q->whereBetween('husband_dob', [$startDate, $endDate])
+                  ->orWhereBetween('wife_dob', [$startDate, $endDate]);
+            });
+        }
+
+        return $query;
     }
 
     public function headings(): array

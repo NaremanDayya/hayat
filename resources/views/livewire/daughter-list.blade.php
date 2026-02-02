@@ -25,14 +25,14 @@
             <div style="position: relative;" x-data="{ open: false }">
                 <button @click="open = !open" class="btn btn-primary" style="background-color: #e91e63;">فلترة العمر</button>
                 <div x-show="open" @click.away="open = false" class="card" style="position: absolute; top: 100%; left: 0; z-index: 100; width: 250px; background: white; margin-top: 10px;">
-                    <label>العمر:</label>
-                    <input type="text" wire:model.live="filterAge" placeholder="العمر (مثال: 10 أو 10-20)">
-                    <label style="margin-top:10px; display:block;">الحالة:</label>
-                    <select wire:model.live="ageCondition">
-                        <option value=">=">أكبر من أو يساوي</option>
-                        <option value="<=">أصغر من أو يساوي</option>
-                        <option value="=">بالضبط</option>
-                    </select>
+                    <label>العمر من:</label>
+                    <input type="number" wire:model.live="minAge" placeholder="أقل عمر">
+                    
+                    <label style="margin-top:10px; display:block;">إلى:</label>
+                    <input type="number" wire:model.live="maxAge" placeholder="أكبر عمر">
+                    
+                    <button @click="open = false" class="btn btn-primary" style="margin-top: 10px; width: 100%; background-color: #e91e63;">تطبيق</button>
+                    <button wire:click="resetFilters" @click="open = false" class="btn" style="margin-top: 5px; width: 100%; background: #eee;">تفريغ</button>
                 </div>
             </div>
         </div>

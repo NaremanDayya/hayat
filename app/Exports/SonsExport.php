@@ -3,16 +3,43 @@
 namespace App\Exports;
 
 use App\Models\FamilyMember;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SonsExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
+class SonsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 {
-    public function collection()
+    protected $filters;
+
+    public function __construct($filters = [])
     {
-        return FamilyMember::where('gender', 'male')->with('family')->get();
+        $this->filters = $filters;
+    }
+
+    public function query()
+    {
+        $query = FamilyMember::where('gender', 'male')->with('family');
+
+        if (!empty($this->filters['search'])) {
+            $search = $this->filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('id_number', 'like', '%' . $search . '%');
+            });
+        }
+
+        if (!empty($this->filters['minAge']) || !empty($this->filters['maxAge'])) {
+            $minAge = $this->filters['minAge'] ?? null;
+            $maxAge = $this->filters['maxAge'] ?? null;
+            
+            $dateEnd = $minAge ? now()->subYears($minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
+            $dateStart = $maxAge ? now()->subYears($maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
+            
+            $query->whereBetween('dob', [$dateStart, $dateEnd]);
+        }
+
+        return $query;
     }
 
     public function headings(): array

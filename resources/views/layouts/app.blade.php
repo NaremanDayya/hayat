@@ -181,11 +181,13 @@
     <nav>
         <div class="nav-brand">مخيم حياة النويري</div>
         <div class="nav-links">
-            <a href="dashboard/families">العائلات</a>
-            <a href="dashboard/sons">الأبناء الذكور</a>
-            <a href="dashboard/daughters">الأبناء الإناث</a>
             @auth
-            <a href="/create-family" class="btn btn-primary">إضافة عائلة</a>
+            <a href="{{route('dashboard.families')}}">العائلات</a>
+            <a href="{{route('dashboard.sons')}}">الأبناء الذكور</a>
+            <a href="{{route('dashboard.daughters')}}">الأبناء الإناث</a>
+            @endauth
+            @auth
+            <a href="{{route('dashboard.create-family')}}" class="btn btn-primary">إضافة عائلة</a>
             @endauth
         </div>
         <div style="text-align: left; display: flex; justify-content: flex-end; gap: 10px;">

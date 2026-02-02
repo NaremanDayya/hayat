@@ -14,12 +14,12 @@ class FamilyList extends Component
 
     public $search = '';
     public $file;
-    public $filterAge = null;
-    public $ageCondition = '>='; // '>=', '<=', '='
+    public $minAge = null;
+    public $maxAge = null;
     public $hasDisease = false;
     public $sortBy = 'latest'; // 'latest', 'name_asc', 'name_desc'
     
-    protected $queryString = ['search', 'filterAge', 'ageCondition', 'hasDisease', 'sortBy'];
+    protected $queryString = ['search', 'minAge', 'maxAge', 'hasDisease', 'sortBy'];
 
     public function updatingSearch()
     {
@@ -28,7 +28,13 @@ class FamilyList extends Component
 
     public function exportExcel()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamiliesExport, 'families_export.xlsx');
+        $filters = [
+            'search' => $this->search,
+            'minAge' => $this->minAge,
+            'maxAge' => $this->maxAge,
+            'hasDisease' => $this->hasDisease,
+        ];
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamiliesExport($filters), 'families_export.xlsx');
     }
 
     public function downloadSample()
@@ -62,15 +68,12 @@ class FamilyList extends Component
         }
     }
 
-    public function setAgeFilter($age, $condition)
-    {
-        $this->filterAge = $age;
-        $this->ageCondition = $condition;
-    }
+    // Age filter helper removed as we use direct inputs
+
 
     public function resetFilters()
     {
-        $this->reset(['search', 'filterAge', 'ageCondition', 'hasDisease', 'sortBy']);
+        $this->reset(['search', 'minAge', 'maxAge', 'hasDisease', 'sortBy']);
     }
 
     public function sortByName()
@@ -124,21 +127,30 @@ class FamilyList extends Component
         // User said "age filter as pop up... he will insert the age... older or younger".
         // In the main family table, maybe we filter by any member's age or parent's age?
         // Let's assume parent's age for now in main table, and child's age in child tables.
-        if ($this->filterAge !== null && $this->filterAge !== '') {
+        if ($this->minAge || $this->maxAge) {
             $query->where(function($q) {
-                $targetDate = now()->subYears($this->filterAge)->format('Y-m-d');
-                if ($this->ageCondition === '>=') {
-                    // Older than X means born BEFORE target date
-                    $q->where('husband_dob', '<=', $targetDate)
-                      ->orWhere('wife_dob', '<=', $targetDate);
-                } elseif ($this->ageCondition === '<=') {
-                    // Younger than X means born AFTER target date
-                    $q->where('husband_dob', '>=', $targetDate)
-                      ->orWhere('wife_dob', '>=', $targetDate);
-                } else {
-                    $q->whereYear('husband_dob', now()->subYears($this->filterAge)->year)
-                      ->orWhereYear('wife_dob', now()->subYears($this->filterAge)->year);
-                }
+                // Calculate dates
+                // minAge means "At least X years old" => Born BEFORE (Today - minAge)
+                // maxAge means "At most Y years old" => Born AFTER (Today - maxAge)
+                
+                $dateMax = $this->minAge ? now()->subYears($this->minAge)->format('Y-m-d') : now()->subYears(100)->format('Y-m-d'); // Default old enough
+                $dateMin = $this->maxAge ? now()->subYears($this->maxAge)->format('Y-m-d') : now()->subYears(0)->format('Y-m-d');   // Default young enough
+
+                // Logic: (Husband DOB between min/max) OR (Wife DOB between min/max)
+                // Note: Dates are reversed. Younger people have larger DOB value (later date).
+                // So "Between Age 20 and 30" => DOB between (Today-30) and (Today-20).
+                // $dateMin is the OLDER date (from maxAge). $dateMax is the NEWER date (from minAge).
+                // Wait.
+                // Age 30 (maxAge) => Born 1994. Age 20 (minAge) => Born 2004.
+                // Range: 1994 to 2004.
+                // So start date is (Today - MaxAge), end date is (Today - MinAge).
+                // Eloquent whereBetween expects [start, end] (usually chronological).
+                
+                $startDate = $this->maxAge ? now()->subYears($this->maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
+                $endDate = $this->minAge ? now()->subYears($this->minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
+
+                $q->whereBetween('husband_dob', [$startDate, $endDate])
+                  ->orWhereBetween('wife_dob', [$startDate, $endDate]);
             });
         }
 

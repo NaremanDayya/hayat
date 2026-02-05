@@ -47,6 +47,7 @@
                     <th>تاريخ الميلاد</th>
                     <th>العمر</th>
                     <th>اسم الأب</th>
+                    <th>رقم هاتف الأب</th>
                     <th>إجراءات</th>
                 </tr>
             </thead>
@@ -58,6 +59,7 @@
                     <td>{{ $son->dob ? $son->dob->translatedFormat('j F Y') : '-' }}</td>
                     <td>{{ $son->age }}</td>
                     <td>{{ $son->family->husband_name }}</td>
+                    <td>{{ $son->family->husband_phone }}</td>
                     <td>
                         <div style="display: flex; gap: 5px;">
                             <a href="{{ route('dashboard.family-details', $son->family_id) }}" class="btn btn-primary">عرض العائلة</a>

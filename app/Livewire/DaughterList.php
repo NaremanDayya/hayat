@@ -24,7 +24,12 @@ class DaughterList extends Component
 
     public function exportExcel()
     {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\DaughtersExport, 'daughters_export.xlsx');
+        $filters = [
+            'search' => $this->search,
+            'minAge' => $this->minAge,
+            'maxAge' => $this->maxAge,
+        ];
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\DaughtersExport($filters), 'daughters_export.xlsx');
     }
 
     public function downloadSample()

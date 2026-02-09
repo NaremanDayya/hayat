@@ -32,6 +32,22 @@
                 </div>
             </div>
 
+            <div style="position: relative;" x-data="{ open: false }">
+                <button @click="open = !open" class="btn btn-primary">
+                    <i class="fas fa-users"></i> عدد الأفراد
+                </button>
+                <div x-show="open" @click.away="open = false" class="card" style="position: absolute; top: 100%; left: 0; z-index: 100; width: 250px; background: white; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <label>العدد من:</label>
+                    <input type="number" wire:model.live="minMembers" placeholder="أقل عدد">
+                    
+                    <label style="margin-top:10px; display:block;">إلى:</label>
+                    <input type="number" wire:model.live="maxMembers" placeholder="أكبر عدد">
+                    
+                    <button @click="open = false" class="btn btn-primary" style="margin-top: 10px; width: 100%;">تطبيق</button>
+                    <button wire:click="resetFilters" @click="open = false" class="btn" style="margin-top: 5px; width: 100%; background: #eee;">تفريغ</button>
+                </div>
+            </div>
+
             <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
                 <input type="checkbox" wire:model.live="hasDisease" style="width: auto;"> حالات صحية
             </label>
@@ -80,7 +96,7 @@
                         <div style="font-weight: bold;">{{ $family->wife_id_number }}</div>
                         <div style="font-size: 0.8rem; color: #666;">{{ $family->wife_dob ? \Carbon\Carbon::parse($family->wife_dob)->translatedFormat('j F Y') : '-' }}</div>
                     </td>
-                    <td>{{ $family->family_members_count }}</td>
+                    <td>{{ $family->calculated_members_count }}</td>
                     <td>{{ $family->current_address }}</td>
                     <td>
                         @if($family->healthConditions->count() > 0)

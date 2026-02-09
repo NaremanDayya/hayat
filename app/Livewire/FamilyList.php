@@ -16,14 +16,18 @@ class FamilyList extends Component
     public $file;
     public $minAge = null;
     public $maxAge = null;
+    public $minMembers = null;
+    public $maxMembers = null;
     public $hasDisease = false;
     public $sortBy = 'latest'; // 'latest', 'name_asc', 'name_desc'
     
-    protected $queryString = ['search', 'minAge', 'maxAge', 'hasDisease', 'sortBy'];
+    protected $queryString = ['search', 'minAge', 'maxAge', 'hasDisease', 'sortBy', 'minMembers', 'maxMembers'];
 
-    public function updatingSearch()
+    public function updated($property)
     {
-        $this->resetPage();
+        if (in_array($property, ['search', 'minAge', 'maxAge', 'minMembers', 'maxMembers', 'hasDisease', 'sortBy'])) {
+            $this->resetPage();
+        }
     }
 
     public function exportExcel()
@@ -32,6 +36,8 @@ class FamilyList extends Component
             'search' => $this->search,
             'minAge' => $this->minAge,
             'maxAge' => $this->maxAge,
+            'minMembers' => $this->minMembers,
+            'maxMembers' => $this->maxMembers,
             'hasDisease' => $this->hasDisease,
         ];
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamiliesExport($filters), 'families_export.xlsx');
@@ -73,7 +79,7 @@ class FamilyList extends Component
 
     public function resetFilters()
     {
-        $this->reset(['search', 'minAge', 'maxAge', 'hasDisease', 'sortBy']);
+        $this->reset(['search', 'minAge', 'maxAge', 'hasDisease', 'sortBy', 'minMembers', 'maxMembers']);
     }
 
     public function sortByName()
@@ -121,6 +127,14 @@ class FamilyList extends Component
 
         if ($this->hasDisease) {
             $query->has('healthConditions');
+        }
+
+        if ($this->minMembers) {
+            $query->has('members', '>=', $this->minMembers);
+        }
+
+        if ($this->maxMembers) {
+            $query->has('members', '<=', $this->maxMembers);
         }
 
         // Family age filter usually applies to members or parents? 

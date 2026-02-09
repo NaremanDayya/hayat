@@ -21,4 +21,9 @@ class Family extends Model
     {
         return $this->hasMany(HealthCondition::class);
     }
+
+    public function getCalculatedMembersCountAttribute()
+    {
+        return $this->members->count();
+    }
 }

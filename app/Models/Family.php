@@ -24,6 +24,16 @@ class Family extends Model
 
     public function getCalculatedMembersCountAttribute()
     {
-        return $this->members->count();
+        $count = $this->members->count();
+
+        if (!empty($this->husband_name)) {
+            $count++;
+        }
+
+        if (!empty($this->wife_name)) {
+            $count++;
+        }
+
+        return $count;
     }
 }

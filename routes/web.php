@@ -5,6 +5,7 @@ use App\Livewire\SonList;
 use App\Livewire\DaughterList;
 use App\Livewire\FamilyManager;
 use App\Livewire\FamilyDetails;
+use App\Livewire\HealthConditionList;
 use App\Livewire\Login;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -49,4 +50,7 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     // Children Management
     Route::get('/sons', SonList::class)->name('sons');
     Route::get('/daughters', DaughterList::class)->name('daughters');
+    
+    // Special Health Cases
+    Route::get('/special-health-cases', HealthConditionList::class)->name('health-conditions');
 });

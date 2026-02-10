@@ -185,6 +185,7 @@
             <a href="{{route('dashboard.families')}}">العائلات</a>
             <a href="{{route('dashboard.sons')}}">الأبناء الذكور</a>
             <a href="{{route('dashboard.daughters')}}">الأبناء الإناث</a>
+            <a href="{{route('dashboard.health-conditions')}}">الحالات الصحية</a>
             @endauth
             @auth
             <a href="{{route('dashboard.create-family')}}" class="btn btn-primary">إضافة عائلة</a>

@@ -22,6 +22,12 @@
                 </button>
             </div>
 
+            <select wire:model.live="hasHealthCondition" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; background-color: white;">
+                <option value="">جميع الحالات الصحية</option>
+                <option value="yes">لديها حالة صحية</option>
+                <option value="no">ليس لديها حالة صحية</option>
+            </select>
+
             <div style="position: relative;" x-data="{ open: false }">
                 <button @click="open = !open" class="btn btn-primary" style="background-color: #e91e63;">فلترة العمر</button>
                 <div x-show="open" @click.away="open = false" class="card" style="position: absolute; top: 100%; left: 0; z-index: 100; width: 250px; background: white; margin-top: 10px;">

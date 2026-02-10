@@ -14,12 +14,13 @@ class SonList extends Component
     public $minAge = null;
     public $maxAge = null;
     public $file;
+    public $hasHealthCondition = '';
     
-    protected $queryString = ['search', 'minAge', 'maxAge'];
+    protected $queryString = ['search', 'minAge', 'maxAge', 'hasHealthCondition'];
 
     public function resetFilters()
     {
-        $this->reset(['search', 'minAge', 'maxAge']);
+        $this->reset(['search', 'minAge', 'maxAge', 'hasHealthCondition']);
     }
 
     public function exportExcel()
@@ -28,6 +29,7 @@ class SonList extends Component
             'search' => $this->search,
             'minAge' => $this->minAge,
             'maxAge' => $this->maxAge,
+            'hasHealthCondition' => $this->hasHealthCondition,
         ];
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SonsExport($filters), 'sons_export.xlsx');
     }
@@ -103,6 +105,18 @@ class SonList extends Component
              $dateEnd = $this->minAge ? now()->subYears($this->minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
              $dateStart = $this->maxAge ? now()->subYears($this->maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
              $query->whereBetween('dob', [$dateStart, $dateEnd]);
+        }
+
+        if ($this->hasHealthCondition !== '') {
+            if ($this->hasHealthCondition === 'yes') {
+                $query->whereHas('family.healthConditions', function($q) {
+                    $q->whereColumn('person_name', 'family_members.name');
+                });
+            } elseif ($this->hasHealthCondition === 'no') {
+                $query->whereDoesntHave('family.healthConditions', function($q) {
+                    $q->whereColumn('person_name', 'family_members.name');
+                });
+            }
         }
 
         return view('livewire.son-list', [

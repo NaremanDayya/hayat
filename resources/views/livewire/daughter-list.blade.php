@@ -54,6 +54,7 @@
                     <th>العمر</th>
                     <th>اسم الأب</th>
                     <th>رقم هاتف الأب</th>
+                    <th>السكن الأصلي</th>
                     <th>إجراءات</th>
                 </tr>
             </thead>
@@ -66,6 +67,7 @@
                     <td>{{ $daughter->age }}</td>
                     <td>{{ $daughter->family->husband_name }}</td>
                     <td>{{ $daughter->family->husband_phone }}</td>
+                    <td>{{ $daughter->family->original_address ?? '-' }}</td>
                     <td>
                         <div style="display: flex; gap: 5px;">
                             <a href="{{ route('dashboard.family-details', $daughter->family_id) }}" class="btn btn-primary" style="background-color: #e91e63;">عرض العائلة</a>

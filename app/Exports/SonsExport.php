@@ -51,6 +51,7 @@ class SonsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             'اسم الأب',
             'رقم هوية الأب',
             'رقم جوال الأب',
+            'السكن الأصلي',
         ];
     }
 
@@ -63,6 +64,7 @@ class SonsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $member->family->husband_name ?? '',
             " " . ($member->family->husband_id_number ?? ''),
             $member->family->husband_phone ?? '',
+            $member->family->original_address ?? '',
         ];
     }
 }

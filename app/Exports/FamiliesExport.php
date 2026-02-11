@@ -68,6 +68,7 @@ class FamiliesExport implements FromQuery, WithHeadings, WithMapping, ShouldAuto
             'تاريخ ميلاد الزوجة',
             'رقم هاتف الزوجة',
             'إجمالي عدد الأفراد',
+            'السكن الأصلي',
             'مكان السكن الحالي',
         ];
     }
@@ -85,6 +86,7 @@ class FamiliesExport implements FromQuery, WithHeadings, WithMapping, ShouldAuto
             $family->wife_dob,
             $family->wife_phone,
             $family->family_members_count,
+            $family->original_address,
             $family->current_address,
         ];
     }

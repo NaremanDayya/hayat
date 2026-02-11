@@ -77,6 +77,7 @@
                     <th>اسم الزوجة</th>
                     <th>رقم هوية الزوجة</th>
                     <th>عدد الأفراد</th>
+                    <th>السكن الأصلي</th>
                     <th>السكن الحالي</th>
                     <th>حالات خاصة</th>
                     <th>إجراءات</th>
@@ -97,6 +98,7 @@
                         <div style="font-size: 0.8rem; color: #666;">{{ $family->wife_dob ? \Carbon\Carbon::parse($family->wife_dob)->translatedFormat('j F Y') : '-' }}</div>
                     </td>
                     <td>{{ $family->calculated_members_count }}</td>
+                    <td>{{ $family->original_address }}</td>
                     <td>{{ $family->current_address }}</td>
                     <td>
                         @if($family->healthConditions->count() > 0)

@@ -146,14 +146,15 @@
 
         .card-image {
             position: relative;
-            height: 220px;
+            height: 260px;
             overflow: hidden;
+            background: #e8ecf1;
         }
 
         .card-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             transition: transform 0.5s;
         }
 

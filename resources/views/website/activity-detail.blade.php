@@ -96,14 +96,15 @@
 
         .article-hero {
             position: relative;
-            height: 400px;
+            height: 450px;
             overflow: hidden;
+            background: #e8ecf1;
         }
 
         .article-hero img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .article-hero .no-image {

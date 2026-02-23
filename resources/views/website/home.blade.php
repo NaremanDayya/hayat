@@ -180,6 +180,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="/">الرئيسية</a></li>
+                <li><a href="/activities">الأنشطة</a></li>
                 <li><a href="/login">تسجيل الدخول</a></li>
             </ul>
         </div>

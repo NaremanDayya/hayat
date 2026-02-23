@@ -7,8 +7,11 @@ use App\Livewire\FamilyManager;
 use App\Livewire\FamilyDetails;
 use App\Livewire\HealthConditionList;
 use App\Livewire\Login;
+use App\Livewire\PostList;
+use App\Livewire\PostManager;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Post;
 
 // ============================================
 // PUBLIC WEBSITE ROUTES
@@ -17,9 +20,20 @@ Route::get('/', function () {
     return view('website.home');
 })->name('home');
 
-// Add more public routes here as needed
-// Route::get('/about', function () { return view('website.about'); })->name('about');
-// Route::get('/contact', function () { return view('website.contact'); })->name('contact');
+// Activities (Public)
+Route::get('/activities', function () {
+    $query = Post::active()->ordered();
+    if (request('type')) {
+        $query->where('type', request('type'));
+    }
+    $posts = $query->paginate(12);
+    return view('website.activities', compact('posts'));
+})->name('activities');
+
+Route::get('/activities/{slug}', function ($slug) {
+    $post = Post::active()->where('slug', $slug)->with('images')->firstOrFail();
+    return view('website.activity-detail', compact('post'));
+})->name('activity.show');
 
 // ============================================
 // AUTHENTICATION ROUTES
@@ -53,4 +67,9 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     
     // Special Health Cases
     Route::get('/special-health-cases', HealthConditionList::class)->name('health-conditions');
+    
+    // Posts / Activities Management
+    Route::get('/posts', PostList::class)->name('posts');
+    Route::get('/create-post', PostManager::class)->name('create-post');
+    Route::get('/edit-post/{id}', PostManager::class)->name('edit-post');
 });

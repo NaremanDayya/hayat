@@ -47,6 +47,50 @@ class HealthCondition extends Model
         return $member ? $member->id_number : 'N/A';
     }
 
+    public function getDateOfBirthAttribute()
+    {
+        if ($this->family && $this->person_name === $this->family->husband_name) {
+            return $this->family->husband_dob;
+        }
+
+        if ($this->family && $this->person_name === $this->family->wife_name) {
+            return $this->family->wife_dob;
+        }
+
+        $member = $this->family ? $this->family->members()->where('name', $this->person_name)->first() : null;
+        return $member ? $member->dob : null;
+    }
+
+    public function getAgeAttribute()
+    {
+        $dob = $this->date_of_birth;
+        if (!$dob) return null;
+        return \Carbon\Carbon::parse($dob)->age;
+    }
+
+    public function getPhoneAttribute()
+    {
+        if ($this->family && $this->person_name === $this->family->husband_name) {
+            return $this->family->husband_phone;
+        }
+
+        if ($this->family && $this->person_name === $this->family->wife_name) {
+            return $this->family->wife_phone;
+        }
+
+        return null;
+    }
+
+    public function getOriginalAddressAttribute()
+    {
+        return $this->family ? $this->family->original_address : null;
+    }
+
+    public function getCurrentAddressAttribute()
+    {
+        return $this->family ? $this->family->current_address : null;
+    }
+
     public function scopeFilterByGender($query, $gender)
     {
         if (!$gender) {

@@ -13,7 +13,7 @@ class HealthCondition extends Model
         return $this->belongsTo(Family::class);
     }
 
-    public function getGenderAttribute()
+    public function getPersonGenderAttribute()
     {
         // Check if person matches husband
         if ($this->family && $this->person_name === $this->family->husband_name) {
@@ -26,11 +26,14 @@ class HealthCondition extends Model
         }
 
         // Check if person matches a child
-        $member = $this->family ? $this->family->members()->where('name', $this->person_name)->first() : null;
-        return $member ? $member->gender : 'N/A';
+        if ($this->family && $this->family->members) {
+            $member = $this->family->members->where('name', $this->person_name)->first();
+            return $member ? $member->gender : 'N/A';
+        }
+        return 'N/A';
     }
 
-    public function getIdNumberAttribute()
+    public function getPersonIdNumberAttribute()
     {
         // Check if person matches husband
         if ($this->family && $this->person_name === $this->family->husband_name) {
@@ -43,11 +46,14 @@ class HealthCondition extends Model
         }
 
         // Check if person matches a child
-        $member = $this->family ? $this->family->members()->where('name', $this->person_name)->first() : null;
-        return $member ? $member->id_number : 'N/A';
+        if ($this->family && $this->family->members) {
+            $member = $this->family->members->where('name', $this->person_name)->first();
+            return $member ? $member->id_number : null;
+        }
+        return null;
     }
 
-    public function getDateOfBirthAttribute()
+    public function getPersonDobAttribute()
     {
         if ($this->family && $this->person_name === $this->family->husband_name) {
             return $this->family->husband_dob;
@@ -57,18 +63,21 @@ class HealthCondition extends Model
             return $this->family->wife_dob;
         }
 
-        $member = $this->family ? $this->family->members()->where('name', $this->person_name)->first() : null;
-        return $member ? $member->dob : null;
+        if ($this->family && $this->family->members) {
+            $member = $this->family->members->where('name', $this->person_name)->first();
+            return $member ? $member->dob : null;
+        }
+        return null;
     }
 
-    public function getAgeAttribute()
+    public function getPersonAgeAttribute()
     {
-        $dob = $this->date_of_birth;
+        $dob = $this->person_dob;
         if (!$dob) return null;
         return \Carbon\Carbon::parse($dob)->age;
     }
 
-    public function getPhoneAttribute()
+    public function getPersonPhoneAttribute()
     {
         if ($this->family && $this->person_name === $this->family->husband_name) {
             return $this->family->husband_phone;
@@ -81,12 +90,12 @@ class HealthCondition extends Model
         return null;
     }
 
-    public function getOriginalAddressAttribute()
+    public function getPersonOriginalAddressAttribute()
     {
         return $this->family ? $this->family->original_address : null;
     }
 
-    public function getCurrentAddressAttribute()
+    public function getPersonCurrentAddressAttribute()
     {
         return $this->family ? $this->family->current_address : null;
     }

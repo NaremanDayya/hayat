@@ -33,21 +33,21 @@
                 @foreach($healthConditions as $condition)
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 12px;">{{ $condition->person_name }}</td>
-                    <td style="padding: 12px;">{{ $condition->id_number ?? '-' }}</td>
+                    <td style="padding: 12px;">{{ $condition->person_id_number ?? '-' }}</td>
                     <td style="padding: 12px;">
-                        @if($condition->gender === 'male')
+                        @if($condition->person_gender === 'male')
                             <span style="background: #3498db; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">ذكر</span>
-                        @elseif($condition->gender === 'female')
+                        @elseif($condition->person_gender === 'female')
                             <span style="background: #e91e63; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">أنثى</span>
                         @else
                             <span style="background: #95a5a6; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;">-</span>
                         @endif
                     </td>
-                    <td style="padding: 12px;">{{ $condition->date_of_birth ? \Carbon\Carbon::parse($condition->date_of_birth)->format('Y-m-d') : '-' }}</td>
-                    <td style="padding: 12px;">{{ $condition->age ?? '-' }}</td>
-                    <td style="padding: 12px;">{{ $condition->phone ?? '-' }}</td>
-                    <td style="padding: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $condition->original_address }}">{{ $condition->original_address ?? '-' }}</td>
-                    <td style="padding: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $condition->current_address }}">{{ $condition->current_address ?? '-' }}</td>
+                    <td style="padding: 12px;">{{ $condition->person_dob ? \Carbon\Carbon::parse($condition->person_dob)->format('Y-m-d') : '-' }}</td>
+                    <td style="padding: 12px;">{{ $condition->person_age ?? '-' }}</td>
+                    <td style="padding: 12px;">{{ $condition->person_phone ?? '-' }}</td>
+                    <td style="padding: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $condition->person_original_address }}">{{ $condition->person_original_address ?? '-' }}</td>
+                    <td style="padding: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $condition->person_current_address }}">{{ $condition->person_current_address ?? '-' }}</td>
                     <td style="padding: 12px; max-width: 200px;">
                         <div style="max-height: 60px; overflow-y: auto;">
                             {{ $condition->condition_details }}

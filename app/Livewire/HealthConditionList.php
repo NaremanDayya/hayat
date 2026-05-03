@@ -29,6 +29,15 @@ class HealthConditionList extends Component
         $this->resetPage();
     }
 
+    public function exportExcel()
+    {
+        $filters = [
+            'search' => $this->search,
+            'gender' => $this->gender,
+        ];
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\HealthConditionsExport($filters), 'health_conditions_export.xlsx');
+    }
+
     public function render()
     {
         $query = HealthCondition::query();

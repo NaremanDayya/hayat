@@ -1,15 +1,17 @@
 <div class="card">
     <div class="flex-between" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h3>الحالات الصحية الخاصة</h3>
-        
+
         <div style="display: flex; gap: 10px; align-items: center;">
             <input type="text" wire:model.live.debounce.300ms="search" placeholder="بحث في الاسم أو الحالة..." style="width: 300px; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
-            
+
             <select wire:model.live="gender" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; background-color: white;">
                 <option value="">جميع الأجناس</option>
                 <option value="male">ذكر</option>
                 <option value="female">أنثى</option>
             </select>
+
+            <button wire:click="exportExcel" class="btn" style="background: #27ae60; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer;">تصدير Excel</button>
         </div>
     </div>
 

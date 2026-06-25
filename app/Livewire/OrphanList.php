@@ -13,13 +13,12 @@ class OrphanList extends Component
     public $search = '';
     public $minAge = null;
     public $maxAge = null;
-    public $orphanType = '';
 
-    protected $queryString = ['search', 'minAge', 'maxAge', 'orphanType'];
+    protected $queryString = ['search', 'minAge', 'maxAge'];
 
     public function resetFilters()
     {
-        $this->reset(['search', 'minAge', 'maxAge', 'orphanType']);
+        $this->reset(['search', 'minAge', 'maxAge']);
     }
 
     public function updatingSearch()
@@ -27,29 +26,10 @@ class OrphanList extends Component
         $this->resetPage();
     }
 
-    public function updatingOrphanType()
-    {
-        $this->resetPage();
-    }
-
     public function render()
     {
-        $query = FamilyMember::with('family');
-
-        if ($this->orphanType === 'father') {
-            $query->whereHas('family', function ($q) {
-                $q->where(function ($q2) {
-                    $q2->whereNull('husband_name')->orWhere('husband_name', '');
-                });
-            });
-        } elseif ($this->orphanType === 'mother') {
-            $query->whereHas('family', function ($q) {
-                $q->where(function ($q2) {
-                    $q2->whereNull('wife_name')->orWhere('wife_name', '');
-                });
-            });
-        } else {
-            $query->where(function ($q) {
+        $query = FamilyMember::with('family')
+            ->where(function ($q) {
                 $q->whereHas('family', function ($q2) {
                     $q2->where(function ($q3) {
                         $q3->whereNull('husband_name')->orWhere('husband_name', '');
@@ -60,7 +40,6 @@ class OrphanList extends Component
                     });
                 });
             });
-        }
 
         if ($this->search) {
             $query->where(function ($q) {

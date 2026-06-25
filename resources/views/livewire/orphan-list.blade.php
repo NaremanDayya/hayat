@@ -43,7 +43,7 @@
                     <th>رقم الهوية</th>
                     <th>تاريخ الميلاد</th>
                     <th>العمر</th>
-                    <th>نوع اليتم</th>
+                    <th>اسم ولي الأمر</th>
                     <th>السكن الأصلي</th>
                     <th>إجراءات</th>
                 </tr>
@@ -55,14 +55,7 @@
                     <td>{{ $orphan->id_number }}</td>
                     <td>{{ $orphan->dob ? $orphan->dob->translatedFormat('j F Y') : '-' }}</td>
                     <td>{{ $orphan->age }}</td>
-                    <td>
-                        @if(empty($orphan->family->husband_name))
-                            <span class="badge" style="background: #3498db; color: white; margin-left: 4px;">يتيم الأب</span>
-                        @endif
-                        @if(empty($orphan->family->wife_name))
-                            <span class="badge" style="background: #e91e63; color: white;">يتيم الأم</span>
-                        @endif
-                    </td>
+                    <td>{{ $orphan->family->husband_name ?? '-' }}</td>
                     <td>{{ $orphan->family->original_address ?? '-' }}</td>
                     <td>
                         <a href="{{ route('dashboard.family-details', $orphan->family_id) }}" class="btn btn-primary">عرض العائلة</a>

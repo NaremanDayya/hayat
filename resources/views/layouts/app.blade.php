@@ -183,8 +183,8 @@
         <div class="nav-links">
             @auth
             <a href="{{route('dashboard.families')}}">العائلات</a>
-            <a href="{{route('dashboard.sons')}}">الأبناء الذكور</a>
-            <a href="{{route('dashboard.daughters')}}">الأبناء الإناث</a>
+            <a href="{{route('dashboard.sons')}}">الذكور</a>
+            <a href="{{route('dashboard.daughters')}}">الإناث</a>
             <a href="{{route('dashboard.health-conditions')}}">الحالات الصحية</a>
             <a href="{{route('dashboard.posts')}}">المنشورات</a>
             @endauth

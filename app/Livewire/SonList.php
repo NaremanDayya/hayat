@@ -16,12 +16,18 @@ class SonList extends Component
     public $maxAge = null;
     public $file;
     public $hasHealthCondition = '';
-    
-    protected $queryString = ['search', 'minAge', 'maxAge', 'hasHealthCondition'];
+    public $personType = '';
+
+    protected $queryString = ['search', 'minAge', 'maxAge', 'hasHealthCondition', 'personType'];
 
     public function resetFilters()
     {
-        $this->reset(['search', 'minAge', 'maxAge', 'hasHealthCondition']);
+        $this->reset(['search', 'minAge', 'maxAge', 'hasHealthCondition', 'personType']);
+    }
+
+    public function updatingPersonType()
+    {
+        $this->resetPage();
     }
 
     public function exportExcel()
@@ -118,7 +124,7 @@ class SonList extends Component
                 'families.husband_id_number as id_number',
                 'families.husband_dob as dob',
                 'families.id as family_id',
-                'families.husband_name',
+                DB::raw('NULL as husband_name'),
                 'families.husband_phone',
                 'families.original_address',
                 'families.created_at',
@@ -140,6 +146,10 @@ class SonList extends Component
              $dateEnd = $this->minAge ? now()->subYears($this->minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
              $dateStart = $this->maxAge ? now()->subYears($this->maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
              $query->whereBetween('dob', [$dateStart, $dateEnd]);
+        }
+
+        if ($this->personType) {
+            $query->where('type', $this->personType);
         }
 
         if ($this->hasHealthCondition !== '') {

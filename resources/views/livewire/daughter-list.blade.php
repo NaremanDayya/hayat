@@ -1,6 +1,6 @@
 <div class="card">
     <div class="flex-between" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3>بيانات البنات الإناث</h3>
+        <h3>الإناث</h3>
         @if (session()->has('message'))
             <div style="background: #27ae60; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">{{ session('message') }}</div>
         @endif
@@ -22,6 +22,12 @@
                 </button>
             </div>
 
+            <select wire:model.live="personType" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; background-color: white;">
+                <option value="">الجميع</option>
+                <option value="parent">الزوجات</option>
+                <option value="member">البنات</option>
+            </select>
+
             <select wire:model.live="hasHealthCondition" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; background-color: white;">
                 <option value="">جميع الحالات الصحية</option>
                 <option value="yes">لديها حالة صحية</option>
@@ -42,6 +48,12 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <span style="background: #fde8ef; color: #2c3e50; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block;">
+            عدد النتائج: {{ $daughters->total() }}
+        </span>
     </div>
 
     <div class="table-container">

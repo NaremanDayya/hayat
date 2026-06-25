@@ -29,6 +29,12 @@
         </div>
     </div>
 
+    <div style="margin-bottom: 15px;">
+        <span style="background: #eef4ff; color: #2c3e50; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block;">
+            عدد النتائج: {{ $healthConditions->total() }}
+        </span>
+    </div>
+
     <div class="table-container" style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; min-width: 1200px;">
             <thead>

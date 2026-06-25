@@ -54,6 +54,12 @@
         </div>
     </div>
 
+    <div style="margin-bottom: 15px;">
+        <span style="background: #eef4ff; color: #2c3e50; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block;">
+            عدد النتائج: {{ $families->total() }}
+        </span>
+    </div>
+
     <div class="table-container">
         <table>
             <thead>

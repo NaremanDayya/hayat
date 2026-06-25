@@ -192,6 +192,7 @@
             <a href="{{route('dashboard.sons')}}">الذكور</a>
             <a href="{{route('dashboard.daughters')}}">الإناث</a>
             <a href="{{route('dashboard.health-conditions')}}">الحالات الصحية</a>
+            <a href="{{route('dashboard.orphans')}}">الأيتام</a>
             <a href="{{route('dashboard.posts')}}">المنشورات</a>
             @endauth
             @auth

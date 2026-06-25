@@ -6,6 +6,7 @@ use App\Livewire\DaughterList;
 use App\Livewire\FamilyManager;
 use App\Livewire\FamilyDetails;
 use App\Livewire\HealthConditionList;
+use App\Livewire\OrphanList;
 use App\Livewire\Login;
 use App\Livewire\PostList;
 use App\Livewire\PostManager;
@@ -67,6 +68,9 @@ Route::prefix('dashboard')->middleware('auth')->name('dashboard.')->group(functi
     
     // Special Health Cases
     Route::get('/special-health-cases', HealthConditionList::class)->name('health-conditions');
+
+    // Orphans
+    Route::get('/orphans', OrphanList::class)->name('orphans');
     
     // Posts / Activities Management
     Route::get('/posts', PostList::class)->name('posts');

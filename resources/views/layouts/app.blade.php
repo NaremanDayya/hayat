@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'مخيم حياة النويري' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo_transparent.png') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +52,13 @@
         }
 
         .nav-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-brand img {
+            height: 50px;
+            width: auto;
         }
 
         .nav-links {
@@ -179,7 +185,7 @@
 </head>
 <body>
     <nav>
-        <div class="nav-brand">مخيم حياة النويري</div>
+        <div class="nav-brand"><img src="{{ asset('logo_transparent.png') }}" alt="مخيم حياة النويري"></div>
         <div class="nav-links">
             @auth
             <a href="{{route('dashboard.families')}}">العائلات</a>

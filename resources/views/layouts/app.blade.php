@@ -57,7 +57,7 @@
         }
 
         .nav-brand img {
-            height: 50px;
+            height: 70px;
             width: auto;
         }
 

@@ -39,6 +39,13 @@
             font-size: 1.8rem;
             font-weight: bold;
             color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 55px;
+            width: auto;
         }
 
         .nav-links {
@@ -176,7 +183,7 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <i class="fas fa-home"></i> مخيم حياة النويري
+                <img src="{{ asset('logo_transparent.png') }}" alt="مخيم حياة النويري">
             </div>
             <ul class="nav-links">
                 <li><a href="/">الرئيسية</a></li>

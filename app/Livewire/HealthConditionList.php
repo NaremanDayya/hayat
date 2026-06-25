@@ -12,10 +12,14 @@ class HealthConditionList extends Component
 
     public $search = '';
     public $gender = '';
+    public $minAge = null;
+    public $maxAge = null;
 
     protected $queryString = [
         'search' => ['except' => ''],
         'gender' => ['except' => ''],
+        'minAge' => ['except' => null],
+        'maxAge' => ['except' => null],
         'page' => ['except' => 1],
     ];
 
@@ -27,6 +31,21 @@ class HealthConditionList extends Component
     public function updatingGender()
     {
         $this->resetPage();
+    }
+
+    public function updatingMinAge()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingMaxAge()
+    {
+        $this->resetPage();
+    }
+
+    public function resetFilters()
+    {
+        $this->reset(['search', 'gender', 'minAge', 'maxAge']);
     }
 
     public function exportExcel()
@@ -51,6 +70,10 @@ class HealthConditionList extends Component
 
         if ($this->gender) {
             $query->filterByGender($this->gender);
+        }
+
+        if ($this->minAge || $this->maxAge) {
+            $query->filterByAge($this->minAge, $this->maxAge);
         }
 
         $healthConditions = $query->with('family.members')->paginate(10);

@@ -63,15 +63,17 @@
                 <tr>
                     <td>{{ $daughter->name }}</td>
                     <td>{{ $daughter->id_number }}</td>
-                    <td>{{ $daughter->dob ? $daughter->dob->translatedFormat('j F Y') : '-' }}</td>
-                    <td>{{ $daughter->age }}</td>
-                    <td>{{ $daughter->family->husband_name }}</td>
-                    <td>{{ $daughter->family->husband_phone }}</td>
-                    <td>{{ $daughter->family->original_address ?? '-' }}</td>
+                    <td>{{ $daughter->dob ? \Carbon\Carbon::parse($daughter->dob)->translatedFormat('j F Y') : '-' }}</td>
+                    <td>{{ $daughter->dob ? \Carbon\Carbon::parse($daughter->dob)->age : '-' }}</td>
+                    <td>{{ $daughter->husband_name }}</td>
+                    <td>{{ $daughter->husband_phone }}</td>
+                    <td>{{ $daughter->original_address ?? '-' }}</td>
                     <td>
                         <div style="display: flex; gap: 5px;">
                             <a href="{{ route('dashboard.family-details', $daughter->family_id) }}" class="btn btn-primary" style="background-color: #e91e63;">عرض العائلة</a>
-                            <button wire:click="deleteDaughter({{ $daughter->id }})" wire:confirm="هل أنت متأكد من حذف هذه البنت؟" class="btn" style="background: #e74c3c; color: white; padding: 5px 10px;">حذف</button>
+                            @if($daughter->type === 'member')
+                                <button wire:click="deleteDaughter({{ $daughter->id }})" wire:confirm="هل أنت متأكد من حذف هذه البنت؟" class="btn" style="background: #e74c3c; color: white; padding: 5px 10px;">حذف</button>
+                            @endif
                         </div>
                     </td>
                 </tr>

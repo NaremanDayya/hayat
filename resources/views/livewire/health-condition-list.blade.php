@@ -11,6 +11,20 @@
                 <option value="female">أنثى</option>
             </select>
 
+            <div style="position: relative;" x-data="{ open: false }">
+                <button @click="open = !open" class="btn btn-primary" type="button">فلترة العمر</button>
+                <div x-show="open" @click.away="open = false" class="card" style="position: absolute; top: 100%; left: 0; z-index: 100; width: 250px; background: white; margin-top: 10px;">
+                    <label>العمر من:</label>
+                    <input type="number" wire:model.live="minAge" placeholder="أقل عمر">
+
+                    <label style="margin-top:10px; display:block;">إلى:</label>
+                    <input type="number" wire:model.live="maxAge" placeholder="أكبر عمر">
+
+                    <button @click="open = false" class="btn btn-primary" style="margin-top: 10px; width: 100%;">تطبيق</button>
+                    <button wire:click="resetFilters" @click="open = false" class="btn" style="margin-top: 5px; width: 100%; background: #eee;">تفريغ</button>
+                </div>
+            </div>
+
             <button wire:click="exportExcel" class="btn" style="background: #27ae60; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer;">تصدير Excel</button>
         </div>
     </div>

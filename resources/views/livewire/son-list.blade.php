@@ -63,15 +63,17 @@
                 <tr>
                     <td>{{ $son->name }}</td>
                     <td>{{ $son->id_number }}</td>
-                    <td>{{ $son->dob ? $son->dob->translatedFormat('j F Y') : '-' }}</td>
-                    <td>{{ $son->age }}</td>
-                    <td>{{ $son->family->husband_name }}</td>
-                    <td>{{ $son->family->husband_phone }}</td>
-                    <td>{{ $son->family->original_address ?? '-' }}</td>
+                    <td>{{ $son->dob ? \Carbon\Carbon::parse($son->dob)->translatedFormat('j F Y') : '-' }}</td>
+                    <td>{{ $son->dob ? \Carbon\Carbon::parse($son->dob)->age : '-' }}</td>
+                    <td>{{ $son->husband_name }}</td>
+                    <td>{{ $son->husband_phone }}</td>
+                    <td>{{ $son->original_address ?? '-' }}</td>
                     <td>
                         <div style="display: flex; gap: 5px;">
                             <a href="{{ route('dashboard.family-details', $son->family_id) }}" class="btn btn-primary">عرض العائلة</a>
-                            <button wire:click="deleteSon({{ $son->id }})" wire:confirm="هل أنت متأكد من حذف هذا الابن؟" class="btn" style="background: #e74c3c; color: white; padding: 5px 10px;">حذف</button>
+                            @if($son->type === 'member')
+                                <button wire:click="deleteSon({{ $son->id }})" wire:confirm="هل أنت متأكد من حذف هذا الابن؟" class="btn" style="background: #e74c3c; color: white; padding: 5px 10px;">حذف</button>
+                            @endif
                         </div>
                     </td>
                 </tr>

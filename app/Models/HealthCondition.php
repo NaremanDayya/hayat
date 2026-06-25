@@ -100,6 +100,31 @@ class HealthCondition extends Model
         return $this->family ? $this->family->current_address : null;
     }
 
+    public function scopeFilterByAge($query, $minAge, $maxAge)
+    {
+        if (!$minAge && !$maxAge) {
+            return $query;
+        }
+
+        $startDate = $maxAge ? now()->subYears($maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
+        $endDate = $minAge ? now()->subYears($minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
+
+        return $query->where(function ($q) use ($startDate, $endDate) {
+            $q->whereHas('family', function ($q) use ($startDate, $endDate) {
+                $q->where(function ($q2) use ($startDate, $endDate) {
+                    $q2->whereColumn('husband_name', 'health_conditions.person_name')
+                       ->whereBetween('husband_dob', [$startDate, $endDate]);
+                })->orWhere(function ($q2) use ($startDate, $endDate) {
+                    $q2->whereColumn('wife_name', 'health_conditions.person_name')
+                       ->whereBetween('wife_dob', [$startDate, $endDate]);
+                });
+            })->orWhereHas('family.members', function ($q) use ($startDate, $endDate) {
+                $q->whereColumn('name', 'health_conditions.person_name')
+                  ->whereBetween('dob', [$startDate, $endDate]);
+            });
+        });
+    }
+
     public function scopeFilterByGender($query, $gender)
     {
         if (!$gender) {

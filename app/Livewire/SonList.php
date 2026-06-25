@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\FamilyMember;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class SonList extends Component
 {
@@ -92,7 +93,41 @@ class SonList extends Component
 
     public function render()
     {
-        $query = FamilyMember::where('gender', 'male')->with('family');
+        $members = DB::table('family_members')
+            ->join('families', 'families.id', '=', 'family_members.family_id')
+            ->where('family_members.gender', 'male')
+            ->select([
+                'family_members.id',
+                'family_members.name',
+                'family_members.id_number',
+                'family_members.dob',
+                'family_members.family_id',
+                'families.husband_name',
+                'families.husband_phone',
+                'families.original_address',
+                'family_members.created_at',
+                DB::raw("'member' as type"),
+            ]);
+
+        $parents = DB::table('families')
+            ->whereNotNull('husband_name')
+            ->where('husband_name', '!=', '')
+            ->select([
+                'families.id',
+                'families.husband_name as name',
+                'families.husband_id_number as id_number',
+                'families.husband_dob as dob',
+                'families.id as family_id',
+                'families.husband_name',
+                'families.husband_phone',
+                'families.original_address',
+                'families.created_at',
+                DB::raw("'parent' as type"),
+            ]);
+
+        $union = $members->unionAll($parents);
+
+        $query = DB::query()->fromSub($union, 't');
 
         if ($this->search) {
             $query->where(function($q) {
@@ -109,18 +144,24 @@ class SonList extends Component
 
         if ($this->hasHealthCondition !== '') {
             if ($this->hasHealthCondition === 'yes') {
-                $query->whereHas('family.healthConditions', function($q) {
-                    $q->whereColumn('person_name', 'family_members.name');
+                $query->whereExists(function($q) {
+                    $q->select(DB::raw(1))
+                      ->from('health_conditions')
+                      ->whereColumn('health_conditions.family_id', 't.family_id')
+                      ->whereColumn('health_conditions.person_name', 't.name');
                 });
             } elseif ($this->hasHealthCondition === 'no') {
-                $query->whereDoesntHave('family.healthConditions', function($q) {
-                    $q->whereColumn('person_name', 'family_members.name');
+                $query->whereNotExists(function($q) {
+                    $q->select(DB::raw(1))
+                      ->from('health_conditions')
+                      ->whereColumn('health_conditions.family_id', 't.family_id')
+                      ->whereColumn('health_conditions.person_name', 't.name');
                 });
             }
         }
 
         return view('livewire.son-list', [
-            'sons' => $query->latest()->paginate(10)
+            'sons' => $query->orderByDesc('created_at')->paginate(10)
         ]);
     }
 }

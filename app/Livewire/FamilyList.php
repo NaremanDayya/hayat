@@ -13,7 +13,6 @@ class FamilyList extends Component
     use WithPagination, WithFileUploads;
 
     public $search = '';
-    public $file;
     public $templateFile;
     public $minAge = null;
     public $maxAge = null;
@@ -44,11 +43,6 @@ class FamilyList extends Component
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamiliesExport($filters), 'families_export.xlsx');
     }
 
-    public function downloadSample()
-    {
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamilySampleExport, 'families_sample.xlsx');
-    }
-
     public function downloadTemplate()
     {
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamilyTemplateExport, 'family_template.xlsx');
@@ -72,32 +66,6 @@ class FamilyList extends Component
             $this->templateFile = null;
         } catch (\Exception $e) {
             \Log::error('Template Import Error: ' . $e->getMessage());
-            $this->dispatch('swal', [
-                'title' => 'خطأ!',
-                'text' => 'حدث خطأ أثناء الاستيراد: ' . $e->getMessage(),
-                'icon' => 'error'
-            ]);
-        }
-    }
-
-    public function importExcel()
-    {
-        $this->validate([
-            'file' => 'required|mimes:xlsx,xls'
-        ]);
-
-        try {
-            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\FamiliesImport, $this->file->getRealPath());
-            
-            $this->dispatch('swal', [
-                'title' => 'تم الاستيراد!',
-                'text' => 'تمت إضافة البيانات من الملف بنجاح.',
-                'icon' => 'success'
-            ]);
-            
-            $this->file = null;
-        } catch (\Exception $e) {
-            \Log::error('Import Error: ' . $e->getMessage());
             $this->dispatch('swal', [
                 'title' => 'خطأ!',
                 'text' => 'حدث خطأ أثناء الاستيراد: ' . $e->getMessage(),

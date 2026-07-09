@@ -7,7 +7,22 @@
             <button wire:click="resetFilters" class="btn" style="background: #95a5a6; color: white;">مسح الفلاتر</button>
             <button wire:click="exportExcel" class="btn" style="background: #27ae60; color: white;">تصدير Excel</button>
             <button wire:click="downloadSample" class="btn" style="background: #3498db; color: white;">تحميل نموذج الرفع</button>
-            
+
+            {{-- Template download + upload --}}
+            <button wire:click="downloadTemplate" class="btn" style="background: #e67e22; color: white;">
+                <i class="fas fa-file-excel"></i> تحميل نموذج الأسر والأبناء
+            </button>
+
+            <div style="display: flex; gap: 5px; align-items: center; background: rgba(230,126,34,0.1); padding: 5px 10px; border-radius: 8px; border: 1px dashed #e67e22;">
+                <span style="font-size: 0.8em; color: #e67e22; white-space: nowrap;">رفع نموذج الأسر:</span>
+                <input type="file" wire:model="templateFile" style="padding: 0; width: 200px; border: none; background: transparent;">
+                <button wire:click="importTemplate" class="btn" style="background: #e67e22; color: white; padding: 5px 15px;" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="importTemplate">رفع</span>
+                    <span wire:loading wire:target="importTemplate">جاري...</span>
+                </button>
+            </div>
+
+            {{-- Old single-sheet upload --}}
             <div style="display: flex; gap: 5px; align-items: center; background: rgba(0,0,0,0.05); padding: 5px 10px; border-radius: 8px;">
                 <input type="file" wire:model="file" style="padding: 0; width: 200px; border: none; background: transparent;">
                 <button wire:click="importExcel" class="btn" style="background: #8e44ad; color: white; padding: 5px 15px;" wire:loading.attr="disabled">

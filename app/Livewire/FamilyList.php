@@ -14,6 +14,7 @@ class FamilyList extends Component
 
     public $search = '';
     public $file;
+    public $templateFile;
     public $minAge = null;
     public $maxAge = null;
     public $minMembers = null;
@@ -46,6 +47,37 @@ class FamilyList extends Component
     public function downloadSample()
     {
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamilySampleExport, 'families_sample.xlsx');
+    }
+
+    public function downloadTemplate()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FamilyTemplateExport, 'family_template.xlsx');
+    }
+
+    public function importTemplate()
+    {
+        $this->validate([
+            'templateFile' => 'required|mimes:xlsx,xls'
+        ]);
+
+        try {
+            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\FamilyTemplateImport, $this->templateFile->getRealPath());
+
+            $this->dispatch('swal', [
+                'title' => 'تم الاستيراد!',
+                'text' => 'تمت إضافة الأسر والأبناء من النموذج بنجاح.',
+                'icon' => 'success'
+            ]);
+
+            $this->templateFile = null;
+        } catch (\Exception $e) {
+            \Log::error('Template Import Error: ' . $e->getMessage());
+            $this->dispatch('swal', [
+                'title' => 'خطأ!',
+                'text' => 'حدث خطأ أثناء الاستيراد: ' . $e->getMessage(),
+                'icon' => 'error'
+            ]);
+        }
     }
 
     public function importExcel()

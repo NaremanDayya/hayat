@@ -128,7 +128,15 @@
             <div style="display: grid; grid-template-columns: 1fr 2fr 0.5fr; gap: 10px; margin-top: 10px; align-items: end;">
                 <div>
                     <label>اسم الشخص</label>
-                    <input type="text" wire:model="health_conditions.{{ $index }}.person_name">
+                    <select wire:model="health_conditions.{{ $index }}.person_name">
+                        <option value="">-- اختر الاسم --</option>
+                        @if(!empty($condition['person_name']) && !in_array($condition['person_name'], array_column($this->personOptions, 'value')))
+                            <option value="{{ $condition['person_name'] }}" selected>{{ $condition['person_name'] }} (غير مطابق - يرجى إعادة الاختيار)</option>
+                        @endif
+                        @foreach($this->personOptions as $option)
+                            <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label>طبيعة الحالة/المرض/الإعاقة</label>

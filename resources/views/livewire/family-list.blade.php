@@ -58,9 +58,12 @@
         </div>
     </div>
 
-    <div style="margin-bottom: 15px;">
+    <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
         <span style="background: #eef4ff; color: #2c3e50; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block;">
             عدد النتائج: {{ $families->total() }}
+        </span>
+        <span style="background: #e8f8f0; color: #27ae60; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.9em; display: inline-block;">
+            إجمالي عدد الأفراد في النظام: {{ $totalMembers }}
         </span>
     </div>
 

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Family;
+use App\Models\FamilyMember;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -177,8 +178,13 @@ class FamilyList extends Component
             $query->latest();
         }
 
+        $totalMembers = FamilyMember::count()
+            + Family::whereNotNull('husband_name')->where('husband_name', '!=', '')->count()
+            + Family::whereNotNull('wife_name')->where('wife_name', '!=', '')->count();
+
         return view('livewire.family-list', [
-            'families' => $query->paginate(10)
+            'families' => $query->paginate(10),
+            'totalMembers' => $totalMembers,
         ]);
     }
 }

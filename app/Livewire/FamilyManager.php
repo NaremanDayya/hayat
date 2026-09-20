@@ -93,6 +93,33 @@ class FamilyManager extends Component
         $this->health_conditions[] = ['person_name' => '', 'details' => ''];
     }
 
+    public function getPersonOptionsProperty()
+    {
+        $options = [];
+
+        if (!empty($this->husband_name)) {
+            $options[] = ['value' => $this->husband_name, 'label' => 'الزوج: ' . $this->husband_name];
+        }
+
+        if (!empty($this->wife_name)) {
+            $options[] = ['value' => $this->wife_name, 'label' => 'الزوجة: ' . $this->wife_name];
+        }
+
+        foreach ($this->sons as $son) {
+            if (!empty($son['name'])) {
+                $options[] = ['value' => $son['name'], 'label' => 'ابن: ' . $son['name']];
+            }
+        }
+
+        foreach ($this->daughters as $daughter) {
+            if (!empty($daughter['name'])) {
+                $options[] = ['value' => $daughter['name'], 'label' => 'ابنة: ' . $daughter['name']];
+            }
+        }
+
+        return $options;
+    }
+
     public function removeHealthCondition($index)
     {
         unset($this->health_conditions[$index]);

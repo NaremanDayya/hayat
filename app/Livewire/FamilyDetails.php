@@ -14,6 +14,16 @@ class FamilyDetails extends Component
         $this->family = Family::with(['members', 'healthConditions'])->findOrFail($id);
     }
 
+    public function exportExcel()
+    {
+        $family = Family::with(['members', 'healthConditions'])->findOrFail($this->family->id);
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\FamilyDetailsExport($family),
+            'family_' . $family->id . '.xlsx'
+        );
+    }
+
     public function deleteFamily()
     {
         $this->family->delete();

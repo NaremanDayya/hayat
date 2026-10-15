@@ -25,6 +25,8 @@
                     <option value="متزوج">متزوج</option>
                     <option value="مطلق">مطلق</option>
                     <option value="أرمل">أرمل</option>
+                    <option value="أرملة">أرملة</option>
+                    <option value="مطلقة">مطلقة</option>
                 </select>
             </div>
 

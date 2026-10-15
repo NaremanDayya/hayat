@@ -3,12 +3,13 @@
 namespace App\Exports;
 
 use App\Models\FamilyMember;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class DaughtersExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
+class DaughtersExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
     protected $filters;
 
@@ -17,29 +18,9 @@ class DaughtersExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
         $this->filters = $filters;
     }
 
-    public function query()
+    public function collection()
     {
-        $query = FamilyMember::where('gender', 'female')->with('family');
-
-        if (!empty($this->filters['search'])) {
-            $search = $this->filters['search'];
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('id_number', 'like', '%' . $search . '%');
-            });
-        }
-
-        if (!empty($this->filters['minAge']) || !empty($this->filters['maxAge'])) {
-            $minAge = $this->filters['minAge'] ?? null;
-            $maxAge = $this->filters['maxAge'] ?? null;
-            
-            $dateEnd = $minAge ? now()->subYears($minAge)->endOfDay()->format('Y-m-d') : now()->format('Y-m-d');
-            $dateStart = $maxAge ? now()->subYears($maxAge)->startOfDay()->format('Y-m-d') : '1900-01-01';
-            
-            $query->whereBetween('dob', [$dateStart, $dateEnd]);
-        }
-
-        return $query;
+        return FamilyMember::femalesQuery($this->filters)->orderByDesc('created_at')->get();
     }
 
     public function headings(): array
@@ -48,23 +29,29 @@ class DaughtersExport implements FromQuery, WithHeadings, WithMapping, ShouldAut
             'الاسم',
             'رقم الهوية',
             'تاريخ الميلاد',
+            'العمر',
+            'الفئة',
+            'الحالة الاجتماعية',
             'اسم الأب',
             'رقم هوية الأب',
-            'رقم جوال الأب',
+            'رقم الجوال',
             'السكن الأصلي',
         ];
     }
 
-    public function map($member): array
+    public function map($row): array
     {
         return [
-            $member->name,
-            " " . $member->id_number,
-            $member->dob,
-            $member->family->husband_name ?? '',
-            " " . ($member->family->husband_id_number ?? ''),
-            $member->family->husband_phone ?? '',
-            $member->family->original_address ?? '',
+            $row->name,
+            " " . $row->id_number,
+            $row->dob,
+            $row->dob ? Carbon::parse($row->dob)->age : '',
+            ['member' => 'ابنة', 'parent' => 'زوجة', 'head' => 'ربة أسرة'][$row->type] ?? '',
+            $row->marital_status ?? '',
+            $row->husband_name ?? '',
+            " " . ($row->husband_id_number ?? ''),
+            $row->husband_phone ?? '',
+            $row->original_address ?? '',
         ];
     }
 }

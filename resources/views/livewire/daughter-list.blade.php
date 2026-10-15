@@ -26,6 +26,14 @@
                 <option value="">الجميع</option>
                 <option value="parent">الزوجات</option>
                 <option value="member">البنات</option>
+                <option value="head">ربات الأسر (أرامل/مطلقات)</option>
+            </select>
+
+            <select wire:model.live="maritalFilter" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; background-color: white;">
+                <option value="">كل الحالات الاجتماعية</option>
+                <option value="widow_divorced">أرامل ومطلقات</option>
+                <option value="widow">أرامل</option>
+                <option value="divorced">مطلقات</option>
             </select>
 
             <select wire:model.live="hasHealthCondition" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; background-color: white;">
@@ -64,6 +72,7 @@
                     <th>رقم الهوية</th>
                     <th>تاريخ الميلاد</th>
                     <th>العمر</th>
+                    <th>الحالة الاجتماعية</th>
                     <th>اسم الأب</th>
                     <th>رقم هاتف الأب</th>
                     <th>السكن الأصلي</th>
@@ -77,6 +86,7 @@
                     <td>{{ $daughter->id_number }}</td>
                     <td>{{ $daughter->dob ? \Carbon\Carbon::parse($daughter->dob)->translatedFormat('j F Y') : '-' }}</td>
                     <td>{{ $daughter->dob ? \Carbon\Carbon::parse($daughter->dob)->age : '-' }}</td>
+                    <td>{{ $daughter->marital_status ?? '-' }}</td>
                     <td>{{ $daughter->husband_name }}</td>
                     <td>{{ $daughter->husband_phone }}</td>
                     <td>{{ $daughter->original_address ?? '-' }}</td>
